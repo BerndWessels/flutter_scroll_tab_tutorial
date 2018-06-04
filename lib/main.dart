@@ -24,18 +24,21 @@ class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
   ScrollController _scrollViewController;
+  ScrollController _scrollViewControllerB;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
     _scrollViewController = ScrollController(initialScrollOffset: 0.0);
+    _scrollViewControllerB = ScrollController(initialScrollOffset: 0.0);
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     _scrollViewController.dispose();
+    _scrollViewControllerB.dispose();
     super.dispose();
   }
 
@@ -89,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage>
         body: TabBarView(
           children: <Widget>[
             PageOne(),
-            PageTwo(),
+            PageTwo(_scrollViewControllerB),
           ],
           controller: _tabController,
         ),
@@ -97,16 +100,16 @@ class _MyHomePageState extends State<MyHomePage>
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.control_point),
         onPressed: () {
-          _tabController.animateTo(1,
-              curve: Curves.bounceInOut, duration: Duration(milliseconds: 10));
-
+//          _tabController.animateTo(1,
+//              curve: Curves.bounceInOut, duration: Duration(milliseconds: 10));
+//
           // _scrollViewController.animateTo(
           //     _scrollViewController.position.minScrollExtent,
           //     duration: Duration(milliseconds: 1000),
           //     curve: Curves.decelerate);
 
-          _scrollViewController
-              .jumpTo(_scrollViewController.position.maxScrollExtent);
+          _scrollViewControllerB
+              .jumpTo(1000.0);//_scrollViewController.position.maxScrollExtent);
         },
       ),
     );
@@ -139,9 +142,15 @@ class PageOne extends StatelessWidget {
 }
 
 class PageTwo extends StatelessWidget {
+  ScrollController _scrollViewControllerB;
+
+  PageTwo(ScrollController controller){
+    _scrollViewControllerB = controller;
+  }
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      controller: _scrollViewControllerB,
       itemExtent: 250.0,
       itemBuilder: (context, index) => Container(
             padding: EdgeInsets.all(10.0),
